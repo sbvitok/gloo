@@ -43,7 +43,7 @@ message AuthConfig {
       AuthPlugin plugin_auth = 5;
       OpaAuth opa_auth = 6;
       Ldap ldap = 7;
-      OAuthClientCredentials oauthCc = 8;
+      OAuthClientCredentials oauth_cc = 8;
     }
   }
 
@@ -361,7 +361,7 @@ message ExtAuthConfig {
       AuthPlugin plugin_auth = 6;
       OpaAuthConfig opa_auth = 7;
       Ldap ldap = 8;
-      OAuthClientCredentials oauthCc = 9;
+      OAuthClientCredentials oauth_cc = 9;
     }
   }
 
