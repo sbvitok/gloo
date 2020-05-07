@@ -43,6 +43,7 @@ message AuthConfig {
       AuthPlugin plugin_auth = 5;
       OpaAuth opa_auth = 6;
       Ldap ldap = 7;
+      OAuthClientCredentials oauthCc = 8;
     }
   }
 
