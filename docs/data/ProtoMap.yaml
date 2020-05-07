@@ -101,6 +101,9 @@ apis:
   enterprise.gloo.solo.io.OAuth:
     relativepath: reference/api/github.com/solo-io/gloo/projects/gloo/api/v1/enterprise/options/extauth/v1/extauth.proto.sk/#OAuth
     package: enterprise.gloo.solo.io
+  enterprise.gloo.solo.io.OAuthClientCredentials:
+    relativepath: reference/api/github.com/solo-io/gloo/projects/gloo/api/v1/enterprise/options/extauth/v1/extauth.proto.sk/#OAuthClientCredentials
+    package: enterprise.gloo.solo.io
   enterprise.gloo.solo.io.OauthSecret:
     relativepath: reference/api/github.com/solo-io/gloo/projects/gloo/api/v1/enterprise/options/extauth/v1/extauth.proto.sk/#OauthSecret
     package: enterprise.gloo.solo.io

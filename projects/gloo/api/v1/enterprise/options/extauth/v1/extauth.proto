@@ -193,6 +193,10 @@ message BasicAuth {
   Apr apr = 2;
 }
 
+message OAuthClientCredentials {
+  string auth_url = 1;
+}
+
 message OAuth {
   // your client id as registered with the issuer
   string client_id = 1;

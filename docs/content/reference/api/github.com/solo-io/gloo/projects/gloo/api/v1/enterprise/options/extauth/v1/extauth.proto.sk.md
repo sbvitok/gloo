@@ -24,6 +24,7 @@ weight: 5
 - [BasicAuth](#basicauth)
 - [Apr](#apr)
 - [SaltedHashedPassword](#saltedhashedpassword)
+- [OAuthClientCredentials](#oauthclientcredentials)
 - [OAuth](#oauth)
 - [OauthSecret](#oauthsecret)
 - [ApiKeyAuth](#apikeyauth)
@@ -323,6 +324,23 @@ This is used with custom auth servers.
 | ----- | ---- | ----------- |----------- | 
 | `salt` | `string` |  |  |
 | `hashedPassword` | `string` |  |  |
+
+
+
+
+---
+### OAuthClientCredentials
+
+
+
+```yaml
+"authUrl": string
+
+```
+
+| Field | Type | Description | Default |
+| ----- | ---- | ----------- |----------- | 
+| `authUrl` | `string` |  |  |
 
 
 
