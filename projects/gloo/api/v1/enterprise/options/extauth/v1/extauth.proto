@@ -360,6 +360,7 @@ message ExtAuthConfig {
       AuthPlugin plugin_auth = 6;
       OpaAuthConfig opa_auth = 7;
       Ldap ldap = 8;
+      OAuthClientCredentials oauthCc = 9;
     }
   }
 

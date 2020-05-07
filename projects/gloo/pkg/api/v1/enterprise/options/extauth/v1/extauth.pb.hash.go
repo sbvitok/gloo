@@ -1331,6 +1331,22 @@ func (m *ExtAuthConfig_Config) Hash(hasher hash.Hash64) (uint64, error) {
 			}
 		}
 
+	case *ExtAuthConfig_Config_OauthCc:
+
+		if h, ok := interface{}(m.GetOauthCc()).(safe_hasher.SafeHasher); ok {
+			if _, err = h.Hash(hasher); err != nil {
+				return 0, err
+			}
+		} else {
+			if val, err := hashstructure.Hash(m.GetOauthCc(), nil); err != nil {
+				return 0, err
+			} else {
+				if err := binary.Write(hasher, binary.LittleEndian, val); err != nil {
+					return 0, err
+				}
+			}
+		}
+
 	}
 
 	return hasher.Sum64(), nil
