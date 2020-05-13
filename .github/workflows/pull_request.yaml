@@ -45,6 +45,10 @@ jobs:
         curl -sSL https://github.com/istio/istio/releases/download/1.5.1/istio-1.5.1-linux.tar.gz | tar -xzf - istio-1.5.1/bin/istioctl
         export PATH=$PWD/istio-1.5.1/bin:$PWD/linux-amd64:$(dirname $KUBECTL):$PATH
         go get -u github.com/onsi/ginkgo/ginkgo
+        docker pull kennship/http-echo@sha256:144322e8e96be2be6675dcf6e3ee15697c5d052d14d240e8914871a2a83990af
+        docker tag kennship/http-echo@sha256:144322e8e96be2be6675dcf6e3ee15697c5d052d14d240e8914871a2a83990af kennship/http-echo:latest
+        kind load docker-image kennship/http-echo:latest
+        kind load docker-image kennship/http-echo@sha256:144322e8e96be2be6675dcf6e3ee15697c5d052d14d240e8914871a2a83990af
         make update-deps
         make build-kind-assets
     - name: Testing - cluster lock
