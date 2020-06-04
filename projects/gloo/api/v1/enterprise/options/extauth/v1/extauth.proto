@@ -217,6 +217,16 @@ message OAuth {
 
   // Scopes to request in addition to openid scope.
   repeated string scopes = 6;
+
+  // the url for the access token introspection endpoint.
+  // if provided, the (opaque) access token received from the oauth endpoint
+  // will be validated against this endpoint
+  string introspection_url = 8;
+
+  // how long the token introspection endpoint response for a specific access token should be kept in-memory cache.
+  // the introspection result will be invalidated at this timeout, or at "exp" time from the introspection
+  // result, whichever comes sooner. if omitted, defaults to 10 minutes
+  google.protobuf.Duration token_introspection_cache_timeout = 9 [(gogoproto.stdduration) = true];
 }
 
 message OauthSecret {
