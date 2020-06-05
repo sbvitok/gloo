@@ -16,7 +16,7 @@ import (
 	. "github.com/solo-io/gloo/projects/gloo/pkg/plugins/pluginutils"
 )
 
-var _ = Describe("PerFilterConfig", func() {
+var _ = Describe("TypedPerFilterConfig", func() {
 	var (
 		in      *v1.Route
 		out     *envoyroute.Route
@@ -38,23 +38,23 @@ var _ = Describe("PerFilterConfig", func() {
 		name = "fakename"
 
 	})
-	Context("set per filter config", func() {
+	Context("set typed per filter config", func() {
 		BeforeEach(func() {
 			out = &envoyroute.Route{}
 		})
 
-		It("should add per filter config to route", func() {
+		It("should add typed per filter config to route", func() {
 			err := SetRouteTypedPerFilterConfig(out, name, msg)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(out.TypedPerFilterConfig).To(HaveKeyWithValue(name, Equal(message)))
 		})
-		It("should add per filter config to vhost", func() {
+		It("should add typed per filter config to vhost", func() {
 			out := &envoyroute.VirtualHost{}
 			err := SetVhostTypedPerFilterConfig(out, name, msg)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(out.TypedPerFilterConfig).To(HaveKeyWithValue(name, Equal(message)))
 		})
-		It("should add per filter config to cluster weight", func() {
+		It("should add typed per filter config to cluster weight", func() {
 			out := &envoyroute.WeightedCluster_ClusterWeight{}
 			err := SetWeightedClusterTypedPerFilterConfig(out, name, msg)
 			Expect(err).NotTo(HaveOccurred())
@@ -92,7 +92,7 @@ var _ = Describe("PerFilterConfig", func() {
 			}
 		})
 
-		It("should add per filter config to upstream", func() {
+		It("should add typed per filter config to upstream", func() {
 
 			err := MarkTypedPerFilterConfig(context.TODO(), &v1.ApiSnapshot{}, in, out, name, func(spec *v1.Destination) (proto.Message, error) {
 				return msg, nil
@@ -101,7 +101,7 @@ var _ = Describe("PerFilterConfig", func() {
 			Expect(out.TypedPerFilterConfig).To(HaveKeyWithValue(name, Equal(message)))
 		})
 
-		It("should add per filter config only to relevant upstream", func() {
+		It("should add typed per filter config only to relevant upstream", func() {
 
 			err := MarkTypedPerFilterConfig(context.TODO(), &v1.ApiSnapshot{}, in, out, name, func(spec *v1.Destination) (proto.Message, error) {
 				return nil, nil
@@ -166,7 +166,7 @@ var _ = Describe("PerFilterConfig", func() {
 			}
 		})
 
-		It("should add per filter config only to relevant upstream in mutiple dest", func() {
+		It("should add typed per filter config only to relevant upstream in mutiple dest", func() {
 
 			err := MarkTypedPerFilterConfig(context.TODO(), &v1.ApiSnapshot{}, in, out, name, func(spec *v1.Destination) (proto.Message, error) {
 				if spec.GetUpstream().Name == "yes" {
@@ -229,7 +229,7 @@ var _ = Describe("PerFilterConfig", func() {
 
 			})
 
-			It("should add per filter config only to relevant upstream in mutiple dest", func() {
+			It("should add typed per filter config only to relevant upstream in mutiple dest", func() {
 
 				err := MarkTypedPerFilterConfig(context.TODO(), snap, in, out, name, func(spec *v1.Destination) (proto.Message, error) {
 					if spec.GetUpstream().Name == "yes" {
