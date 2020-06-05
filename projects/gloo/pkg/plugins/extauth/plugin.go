@@ -44,7 +44,7 @@ func (p *Plugin) HttpFilters(params plugins.Params, listener *v1.HttpListener) (
 	return BuildHttpFilters(settings, params.Snapshot.Upstreams)
 }
 
-// This function generates the ext_authz PerFilterConfig for this virtual host. If the ext_authz filter was not
+// This function generates the ext_authz TypedPerFilterConfig for this virtual host. If the ext_authz filter was not
 // configured on the listener, do nothing. If the filter is configured and the virtual host does not define
 // an extauth configuration OR explicitly disables extauth, we disable the ext_authz filter.
 // This is done to disable authentication by default on a virtual host and its child resources (routes, weighted
@@ -76,10 +76,10 @@ func (p *Plugin) ProcessVirtualHost(params plugins.VirtualHostParams, in *v1.Vir
 		},
 	}
 
-	return pluginutils.SetVhostPerFilterConfig(out, FilterName, config)
+	return pluginutils.SetVhostTypedPerFilterConfig(out, FilterName, config)
 }
 
-// This function generates the ext_authz PerFilterConfig for this route:
+// This function generates the ext_authz TypedPerFilterConfig for this route:
 // - if the route defines custom auth configuration, set the filter correspondingly;
 // - if auth is explicitly disabled, disable the filter (will apply by default also to WeightedDestinations);
 // - else, do nothing (will inherit config from parent virtual host).
@@ -110,10 +110,10 @@ func (p *Plugin) ProcessRoute(params plugins.RouteParams, in *v1.Route, out *rou
 		},
 	}
 
-	return pluginutils.SetRoutePerFilterConfig(out, FilterName, config)
+	return pluginutils.SetRouteTypedPerFilterConfig(out, FilterName, config)
 }
 
-// This function generates the ext_authz PerFilterConfig for this weightedDestination:
+// This function generates the ext_authz TypedPerFilterConfig for this weightedDestination:
 // - if the weightedDestination defines custom auth configuration, set the filter correspondingly;
 // - if auth is explicitly disabled, disable the filter;
 // - else, do nothing (will inherit config from parent virtual host and/or route).
@@ -144,7 +144,7 @@ func (p *Plugin) ProcessWeightedDestination(params plugins.RouteParams, in *v1.W
 		},
 	}
 
-	return pluginutils.SetWeightedClusterPerFilterConfig(out, FilterName, config)
+	return pluginutils.SetWeightedClusterTypedPerFilterConfig(out, FilterName, config)
 }
 
 func (p *Plugin) isExtAuthzFilterConfigured(upstreams v1.UpstreamList) bool {
@@ -166,15 +166,15 @@ func (p *Plugin) isExtAuthzFilterConfigured(upstreams v1.UpstreamList) bool {
 }
 
 func markVirtualHostNoAuth(out *envoyroute.VirtualHost) error {
-	return pluginutils.SetVhostPerFilterConfig(out, FilterName, getNoAuthConfig())
+	return pluginutils.SetVhostTypedPerFilterConfig(out, FilterName, getNoAuthConfig())
 }
 
 func markWeightedClusterNoAuth(out *envoyroute.WeightedCluster_ClusterWeight) error {
-	return pluginutils.SetWeightedClusterPerFilterConfig(out, FilterName, getNoAuthConfig())
+	return pluginutils.SetWeightedClusterTypedPerFilterConfig(out, FilterName, getNoAuthConfig())
 }
 
 func markRouteNoAuth(out *envoyroute.Route) error {
-	return pluginutils.SetRoutePerFilterConfig(out, FilterName, getNoAuthConfig())
+	return pluginutils.SetRouteTypedPerFilterConfig(out, FilterName, getNoAuthConfig())
 }
 
 func getNoAuthConfig() *envoyauth.ExtAuthzPerRoute {
