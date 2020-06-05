@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/golang/protobuf/ptypes/any"
 	structpb "github.com/golang/protobuf/ptypes/struct"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -18,11 +17,10 @@ import (
 
 var _ = Describe("PerFilterConfig", func() {
 	var (
-		in      *v1.Route
-		out     *envoyroute.Route
-		msg     *structpb.Struct
-		message *any.Any
-		name    string
+		in   *v1.Route
+		out  *envoyroute.Route
+		msg  *structpb.Struct
+		name string
 	)
 	BeforeEach(func() {
 		msg = &structpb.Struct{
@@ -32,9 +30,6 @@ var _ = Describe("PerFilterConfig", func() {
 				}},
 			},
 		}
-		var err error
-		message, err = MessageToAny(msg)
-		Expect(err).NotTo(HaveOccurred())
 		name = "fakename"
 
 	})
@@ -46,19 +41,19 @@ var _ = Describe("PerFilterConfig", func() {
 		It("should add per filter config to route", func() {
 			err := SetRoutePerFilterConfig(out, name, msg)
 			Expect(err).NotTo(HaveOccurred())
-			Expect(out.TypedPerFilterConfig).To(HaveKeyWithValue(name, Equal(message)))
+			Expect(out.PerFilterConfig).To(HaveKeyWithValue(name, BeEquivalentTo(msg)))
 		})
 		It("should add per filter config to vhost", func() {
 			out := &envoyroute.VirtualHost{}
 			err := SetVhostPerFilterConfig(out, name, msg)
 			Expect(err).NotTo(HaveOccurred())
-			Expect(out.TypedPerFilterConfig).To(HaveKeyWithValue(name, Equal(message)))
+			Expect(out.PerFilterConfig).To(HaveKeyWithValue(name, BeEquivalentTo(msg)))
 		})
 		It("should add per filter config to cluster weight", func() {
 			out := &envoyroute.WeightedCluster_ClusterWeight{}
 			err := SetWeightedClusterPerFilterConfig(out, name, msg)
 			Expect(err).NotTo(HaveOccurred())
-			Expect(out.TypedPerFilterConfig).To(HaveKeyWithValue(name, Equal(message)))
+			Expect(out.PerFilterConfig).To(HaveKeyWithValue(name, BeEquivalentTo(msg)))
 		})
 	})
 
@@ -98,7 +93,7 @@ var _ = Describe("PerFilterConfig", func() {
 				return msg, nil
 			})
 			Expect(err).NotTo(HaveOccurred())
-			Expect(out.TypedPerFilterConfig).To(HaveKeyWithValue(name, Equal(message)))
+			Expect(out.PerFilterConfig).To(HaveKeyWithValue(name, BeEquivalentTo(msg)))
 		})
 
 		It("should add per filter config only to relevant upstream", func() {
@@ -107,7 +102,7 @@ var _ = Describe("PerFilterConfig", func() {
 				return nil, nil
 			})
 			Expect(err).NotTo(HaveOccurred())
-			Expect(out.TypedPerFilterConfig).ToNot(HaveKey(name))
+			Expect(out.PerFilterConfig).ToNot(HaveKey(name))
 		})
 	})
 	Context("multiple dests", func() {
@@ -176,9 +171,9 @@ var _ = Describe("PerFilterConfig", func() {
 			})
 			Expect(err).NotTo(HaveOccurred())
 
-			Expect(yescluster.TypedPerFilterConfig).To(HaveKeyWithValue(name, Equal(message)))
-			Expect(nocluster.TypedPerFilterConfig).ToNot(HaveKey(name))
-			Expect(out.TypedPerFilterConfig).ToNot(HaveKey(name))
+			Expect(yescluster.PerFilterConfig).To(HaveKeyWithValue(name, BeEquivalentTo(msg)))
+			Expect(nocluster.PerFilterConfig).ToNot(HaveKey(name))
+			Expect(out.PerFilterConfig).ToNot(HaveKey(name))
 
 		})
 		Context("upstream group", func() {
@@ -239,9 +234,9 @@ var _ = Describe("PerFilterConfig", func() {
 				})
 				Expect(err).NotTo(HaveOccurred())
 
-				Expect(yescluster.TypedPerFilterConfig).To(HaveKeyWithValue(name, Equal(message)))
-				Expect(nocluster.TypedPerFilterConfig).ToNot(HaveKey(name))
-				Expect(out.TypedPerFilterConfig).ToNot(HaveKey(name))
+				Expect(yescluster.PerFilterConfig).To(HaveKeyWithValue(name, BeEquivalentTo(msg)))
+				Expect(nocluster.PerFilterConfig).ToNot(HaveKey(name))
+				Expect(out.PerFilterConfig).ToNot(HaveKey(name))
 
 			})
 		})
