@@ -11,5 +11,5 @@ const (
 )
 
 var (
-	ClusterConnectionTimeout = time.Second * 5
+	ClusterConnectionTimeout = time.Second * 0.3
 )
